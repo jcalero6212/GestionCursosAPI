@@ -1,0 +1,121 @@
+body {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  display: flex; /* Esto hace que sidebar y main-content estén en línea horizontal */
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 130px; /* antes 220px */
+  background: #111827;
+  color: white;
+  padding: 20px;
+}
+
+
+.logo {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 40px;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu li {
+  margin: 20px 0;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #f43f5e;
+  font-weight: bold;
+}
+
+.main-content {
+  flex-grow: 1;
+  background-color: #1e293b;
+  color: white;
+  padding: 30px 10px; /* padding lateral mayor */
+}
+
+
+.students-list, .professors-list, .courses-list {
+  background-color: #2d3748;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #2d3748;
+  color: white;
+}
+
+td {
+  background-color: #374151;
+  color: white;
+}
+
+button {
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.edit-btn {
+  background-color: #f43f5e;
+}
+
+.delete-btn {
+  background-color: #ef4444;
+}
+
+.new-btn {
+  background-color: #10b981;
+  padding: 10px 20px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Animación de neón para el reloj */
+@keyframes neonPulse {
+  0%, 100% {
+    text-shadow: 0 0 10px #f43f5e, 0 0 20px #f43f5e, 0 0 30px #f43f5e;
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 20px #f43f5e, 0 0 30px #f43f5e, 0 0 40px #f43f5e;
+    transform: scale(1.02);
+  }
+}
+
+.clock {
+  font-size: 48px;
+  font-weight: bold;
+  color: #f43f5e;
+  animation: neonPulse 2s infinite;
+}
+
+.date {
+  font-size: 18px;
+  color: #f43f5e;
+  text-shadow: 0 0 5px #f43f5e;
+}

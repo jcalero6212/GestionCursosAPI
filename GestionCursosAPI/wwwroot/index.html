@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Estudiantes y Profesores</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">GESTIÓN DE ESTUDIANTES</div>
+    <ul class="menu">
+      <li><a href="#" onclick="showStudents()">📚 Estudiantes</a></li>
+      <li><a href="#" onclick="showProfessors()">👨‍🏫 Profesores</a></li>
+      <li><a href="#" onclick="showCourses()">📘 Materias</a></li>
+      <li><a href="#" onclick="showStudentsInSubject()">📚 Estudiantes en Materia</a></li>
+      <li><a href="#" onclick="mostrarAsignacion()">📚 Asignación</a></li>
+      <li><a href="#" onclick="showMatriculas()">📝 Matrículas</a></li>
+     
+      <li><a href="#">👤 Usuarios</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="user-info">
+      <p><strong>Nombres</strong></p>
+      <p>Apellidos User</p>
+      <p>Cargo</p>
+    </div> 
+
+    <!-- Estudiantes -->
+    <div id="students-list" style="display: none;">
+      <h2>Lista de Estudiantes</h2>
+    
+      <div style="margin-bottom: 15px;">
+        <label for="carreraSelect"><strong>Filtrar por carrera:</strong></label>
+        <select id="carreraSelect" onchange="filtrarEstudiantesPorCarrera()">
+          <option value="">-- Todas las carreras --</option>
+        </select>
+      </div>
+    
+      <table>
+        <thead>
+          <tr>
+            <th>Cédula</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Fecha Nacimiento</th>
+            <th>Gmail</th>
+            <th>Dirección</th>
+            <th>Télefono</th>
+            <th>Carrera</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button class="new-btn" onclick="mostrarFormularioEstudiante()">Nuevo Estudiante</button>
+    </div>
+
+    <div id="addStudentForm" style="display: none;">
+      <form id="estudianteForm">
+        <input type="text" id="id" placeholder="Cédula (ID)" required />
+        <input type="text" id="nombre" placeholder="Nombre" required />
+        <input type="text" id="apellido" placeholder="Apellido" required />
+        <input type="date" id="fechaNacimiento" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="text" id="direccion" placeholder="Dirección" required />
+        <input type="text" id="telefono" placeholder="Teléfono" required />
+    
+        <label for="carreraEstudiante">Carrera:</label>
+        <select id="carreraEstudiante" required>
+          <option value="">-- Selecciona una carrera --</option>
+        </select>
+    
+        <button type="submit">Guardar Estudiante</button>
+      </form>
+      <p id="msgEstudiante" style="margin-top: 10px;"></p>
+    </div>
+
+    <!-- Profesores -->
+    <div id="professors-list" style="display: none;">
+      <h2>Lista de Profesores</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Cédula</th><th>Nombre</th><th>Apellido</th><th>Fecha Nacimiento</th>
+            <th>Gmail</th><th>Dirección</th><th>teléfono</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button class="new-btn" onclick="mostrarFormularioProfesor()">Nuevo Profesor</button>
+    </div>
+
+    <div id="addProfessorForm" style="display: none;">
+      <form id="profesoresForm">
+        <input type="text" id="idProfesor" placeholder="Cédula (ID)" required />
+        <input type="text" id="nombreProfesor" placeholder="Nombre" required />
+        <input type="text" id="apellidoProfesor" placeholder="Apellido" required />
+        <input type="date" id="fechaNacimientoProfesor" required />
+        <input type="email" id="emailProfesor" placeholder="Email" required />
+        <input type="text" id="direccionProfesor" placeholder="Dirección" required />
+        <input type="text" id="telefonoProfesor" placeholder="Teléfono" required />
+        <button type="submit">Guardar Profesor</button>
+      </form>
+      <div id="mensajeProfesores"></div>
+    </div>
+
+    <!-- Cursos -->
+    <div id="courses-list" style="display: none;">
+      <h2>Lista de Cursos</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Nombre</th><th>Crédito</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <button class="new-btn" onclick="mostrarFormularioCurso()">Nuevo Curso</button>
+
+      <div id="formularioCurso" style="display: none; margin-top: 20px;">
+        <h3>Agregar Curso</h3>
+        <form id="courseForm">
+          <input type="text" id="nombreCurso" placeholder="Nombre del curso" required />
+          <input type="number" id="creditoCurso" placeholder="Créditos" required />
+          <button type="submit" id="submitBtn">Guardar</button>
+        </form>
+        <p id="msg" style="margin-top: 10px;"></p>
+      </div>
+    </div>
+
+
+    
+<!-- 🔄 Sección de Asignación responsive y limpia -->
+<div id="asignacion-section" style="display: none; color: white; width: 100%; margin: auto;">
+  <div style="background-color: #1c1c1c; padding: 25px; border-radius: 10px;">
+    <h2 style="text-align: center;">📚 Asignación de Materias a Carreras y Profesores</h2>
+
+    <!-- 🔽 Tabla -->
+    <table style="width: 100%; background-color: #2a2a2a; color: white; border-collapse: collapse; margin-bottom: 25px; font-size: 14px;">
+      <thead>
+        <tr style="background-color: #333;">
+          <th style="padding: 10px;">Carrera</th>
+          <th style="padding: 10px;">Materia</th>
+          <th style="padding: 10px;">Profesor</th>
+          <th style="padding: 10px;">Semestre</th>
+          <th style="padding: 10px;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaAsignaciones">
+        <!-- Aquí se llenan dinámicamente las filas -->
+      </tbody>
+    </table>
+
+    <!-- 🧾 Formulario dentro del mismo fondo -->
+    <h3 style="text-align: center;">➕ Nueva Asignación</h3>
+    <form id="formAsignacion" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px;">
+      
+      <!-- Carreras -->
+      <div style="flex: 1 1 45%;">
+        <label for="carreraAsignacion">Carrera:</label>
+        <select id="carreraAsignacion" required style="width: 100%; padding: 6px;">
+          <option value="">-- Selecciona una carrera --</option>
+        </select>
+      </div>
+
+      <!-- Materias -->
+      <div style="flex: 1 1 45%;">
+        <label for="materiaAsignacion">Materia:</label>
+        <select id="materiaAsignacion" required style="width: 100%; padding: 6px;">
+          <option value="">-- Selecciona una materia --</option>
+        </select>
+      </div>
+
+      <!-- Profesores -->
+      <div style="flex: 1 1 45%;">
+        <label for="profesorAsignacion">Profesor:</label>
+        <select id="profesorAsignacion" required style="width: 100%; padding: 6px;">
+          <option value="">-- Selecciona un profesor --</option>
+        </select>
+      </div>
+
+      <!-- Semestre -->
+      <div style="flex: 1 1 45%;">
+        <label for="semestreAsignacion">Semestre:</label>
+        <input type="number" id="semestreAsignacion" min="1" max="12" required style="width: 100%; padding: 6px;" />
+      </div>
+
+      <!-- Botón -->
+      <div style="flex: 1 1 100%;">
+        <button type="submit" style="width: 100%; padding: 10px; background: #0a84ff; color: white; border: none; border-radius: 4px;">
+          Guardar Asignación
+        </button>
+      </div>
+    </form>
+
+    <div id="msgAsignacion" style="margin-top: 15px; text-align: center;"></div>
+  </div>
+</div>
+
+
+
+<!-- Filtrado de Estudiantes por Materia -->
+<div id="filter-students-by-subject" style="display: none;">
+  <h2>Filtrar Estudiantes por Materia</h2>
+
+  <form id="filterForm">
+    <label for="filterCarrera">Carrera:</label>
+    <select id="filterCarrera" required>
+      <option value="">-- Selecciona una carrera --</option>
+    </select>
+
+    <label for="filterSemestre">Semestre:</label>
+    <select id="filterSemestre" required>
+      <option value="">-- Selecciona un semestre --</option>
+      <option value="1">1°</option>
+      <option value="2">2°</option>
+      <option value="3">3°</option>
+      <option value="4">4°</option>
+      <option value="5">5°</option>
+      <option value="6">6°</option>
+      <option value="7">7°</option>
+      <option value="8">8°</option>
+      <option value="9">9°</option>
+      <option value="10">10°</option>
+    </select>
+
+    <label for="filterMateria">Materia:</label>
+    <select id="filterMateria" required>
+      <option value="">-- Selecciona una materia --</option>
+    </select>
+
+    <label for="filterProfesor">Profesor:</label>
+    <select id="filterProfesor" required>
+      <option value="">-- Selecciona un profesor --</option>
+    </select>
+
+    <button type="submit">Filtrar</button>
+  </form>
+
+  <div id="filteredStudentsList" style="margin-top: 20px;">
+    <h3>Estudiantes Filtrados</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Cédula</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Fecha Nacimiento</th>
+          <th>Gmail</th>
+          <th>Dirección</th>
+          <th>Teléfono</th>
+          <th>Carrera</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="filteredStudentsTable"></tbody>
+    </table>
+  </div>
+</div>
+
+
+
+<!-- Sección de matrícula -->
+<div id="matricula-section" style="display: none;">
+  <h2>📚 Matricular Estudiante</h2>
+
+  <form id="matriculaForm">
+    <label for="carrera">Carrera:</label>
+    <select id="carrera" required>
+      <option value="">-- Selecciona una carrera --</option>
+    </select>
+
+    <label for="semestre">Semestre:</label>
+    <select id="semestre" required>
+      <option value="">-- Selecciona un semestre --</option>
+      <option value="1">1°</option>
+      <option value="2">2°</option>
+      <option value="3">3°</option>
+      <option value="4">4°</option>
+      <option value="5">5°</option>
+      <option value="6">6°</option>
+      <option value="7">7°</option>
+      <option value="8">8°</option>
+      <option value="9">9°</option>
+      <option value="10">10°</option>
+    </select>
+
+    <label for="estudiante">Estudiante:</label>
+    <select id="estudiante" required>
+      <option value="">-- Selecciona un estudiante --</option>
+    </select>
+
+    <label for="materia">Materia:</label>
+    <select id="materia" required>
+      <option value="">-- Selecciona una materia --</option>
+    </select>
+
+    <label for="profesor">Profesor:</label>
+    <select id="profesor" required>
+      <option value="">-- Selecciona un profesor --</option>
+    </select>
+
+    <label for="horario">Horario:</label>
+    <select id="horario" required>
+      <option value="Matutino">Matutino</option>
+      <option value="Vespertino">Vespertino</option>
+    </select>
+
+    <label for="fecha">Fecha de matrícula:</label>
+    <input type="date" id="fecha" required>
+
+    <button type="submit">✅ Matricular</button>
+  </form>
+
+  <div id="mensajeMatricula" style="margin-top: 20px;"></div>
+</div>
+
+<!-- 🔻 Scripts -->
+<script>
+  // Ocultar todas las secciones excepto la que se desea mostrar
+  function ocultarTodo() {
+    const sections = [
+      'students-list',
+      'professors-list',
+      'courses-list',
+      'addStudentForm',
+      'addProfessorForm',
+      'formularioCurso',
+      'asignacion-section',
+      'matricula-section',
+      'filter-students-by-subject'
+    ];
+    
+    sections.forEach(section => {
+      const element = document.getElementById(section);
+      if (element) element.style.display = 'none';
+    });
+  }
+
+  // Funciones para mostrar secciones específicas
+  function showMatriculas() {
+    ocultarTodo();
+    document.getElementById('matricula-section').style.display = 'block';
+  }
+  // Función para mostrar la sección de "Estudiantes en Materia"
+function showStudentsInSubject() {
+  ocultarTodo();
+  document.getElementById('filter-students-by-subject').style.display = 'block';
+}
+
+
+  // Cargar carreras en los combos
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch(`/api/carreras`)
+      .then(response => response.json())
+      .then(carreras => {
+        const carreraSelect = document.getElementById("carrera");
+
+        carreras.forEach(carrera => {
+          const option = document.createElement("option");
+          option.value = carrera.id;  // Asegúrate de usar el campo correcto
+          option.textContent = carrera.nombre;  // Asegúrate de usar el campo correcto
+          carreraSelect.appendChild(option);
+        });
+      })
+      .catch(error => console.log("Error al obtener las carreras:", error));
+  });
+
+  
+
+  // Cargar estudiantes según la carrera seleccionada
+  function cargarEstudiantes(carreraId) {
+    fetch(`/api/estudiantes/carrera/${carreraId}`)
+      .then(response => response.json())
+      .then(estudiantes => {
+        const estudianteSelect = document.getElementById("estudiante");
+        estudianteSelect.innerHTML = "<option value=''>-- Selecciona un estudiante --</option>";
+
+        estudiantes.forEach(estudiante => {
+          const option = document.createElement("option");
+          option.value = estudiante.id;
+          option.textContent = `${estudiante.nombre} ${estudiante.apellido}`;  // Asegúrate de usar los campos correctos
+          estudianteSelect.appendChild(option);
+        });
+      })
+      .catch(error => console.log("Error al obtener estudiantes:", error));
+  }
+
+  // Cargar materias según la carrera y semestre seleccionados
+  function cargarMaterias(carreraId, semestre) {
+    fetch(`/api/cursos/carrera/${carreraId}/semestre/${semestre}`)
+      .then(response => response.json())
+      .then(materias => {
+        const materiaSelect = document.getElementById("materia");
+        materiaSelect.innerHTML = "<option value=''>-- Selecciona una materia --</option>";
+
+        materias.forEach(materia => {
+          const option = document.createElement("option");
+          option.value = materia.id;
+          option.textContent = materia.nombre;
+          materiaSelect.appendChild(option);
+        });
+      })
+      .catch(error => console.log("Error al obtener materias:", error));
+  }
+
+  // Cargar profesores según la materia seleccionada
+  function cargarProfesores(materiaId) {
+    fetch(`/api/profesores/materia/${materiaId}`)
+      .then(response => response.json())
+      .then(profesores => {
+        const profesorSelect = document.getElementById("profesor");
+        profesorSelect.innerHTML = "<option value=''>-- Selecciona un profesor --</option>";
+
+        profesores.forEach(profesor => {
+          const option = document.createElement("option");
+          option.value = profesor.id;
+          option.textContent = profesor.nombre;
+          profesorSelect.appendChild(option);
+        });
+      })
+      .catch(error => console.log("Error al obtener profesores:", error));
+  }
+
+  // Agregar eventos para manejar los cambios de los select
+  document.getElementById('carrera').addEventListener('change', function () {
+    const carreraId = this.value;
+    cargarEstudiantes(carreraId);
+    document.getElementById('materia').innerHTML = "<option value=''>-- Selecciona una materia --</option>";
+    document.getElementById('profesor').innerHTML = "<option value=''>-- Selecciona un profesor --</option>";
+  });
+
+  document.getElementById('semestre').addEventListener('change', function () {
+    const carreraId = document.getElementById('carrera').value;
+    const semestre = this.value;
+    if (carreraId && semestre) {
+      cargarMaterias(carreraId, semestre);
+    }
+  });
+
+  document.getElementById('materia').addEventListener('change', function () {
+    const materiaId = this.value;
+    if (materiaId) {
+      cargarProfesores(materiaId);
+    }
+  });
+</script>
+
+
+
+
+  <script src="script.js"></script>
+</body>
+</html>
